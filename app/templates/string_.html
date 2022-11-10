@@ -1,0 +1,20 @@
+{% set enabled_classes = '' if fragment.enabled_classes is none else 'vis ' + fragment.enabled_classes %}
+{% if fragment.required_condition is not none %}
+    <tr class='conditional {{enabled_classes}}' compulsory_key="{{fragment.required_condition.get('key')}}" compulsory_value="{{fragment.required_condition.get('value')}}">
+{% else %}
+    <tr class='{{enabled_classes}}'>
+{% endif %}
+{# Compulsory is different to required; we're compulsory if we have no 'required' class AND no vis_ classes. #}
+{% set compulsory_class = 'compulsory ' if fragment.compulsory else '' %}
+<td align=right nowrap class='{{compulsory_class}}label'>{{fragment.caption}}:</td>
+{% if fragment.rows is none %}
+    <td align=left>
+{% else %}
+    <td align=left colspan=2>
+{% endif %}
+{% if not fragment.invalid is none %}
+    {% autoescape false %}
+        <div class="invalid hidden">{{fragment.invalid}}</div>
+    {% endautoescape %}
+{% endif %}
+{{form[fragment.key](class_=fragment.classes, placeholder=fragment.placeholder, rows=fragment.rows, cols=fragment.cols)}}</td></tr>

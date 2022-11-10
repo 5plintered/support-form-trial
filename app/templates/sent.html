@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Support</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="{{css_url}}" type="text/css">
+  </head>
+ 
+  <body>
+    <div class="container">
+      <h2>Your report is submitted.</h2>
+
+      <p>
+        Thank you -- you'll receive a copy of this submission via email.<br>
+        <br>
+        The best way to add questions or information is to reply to that email -- that way, everyone on the team will see it. <br>
+        <br>
+        {% if urgency == "High"%}
+        For this high-priority issue, you should also receive an immediate reply from a human.  <br>
+        If you have concerns or need a status update, you can reply to the email or ring Marie @ x4101.<br> 
+        <br>
+        {% endif %}
+        <a href='?email={{email}}'>Report another issue</a>
+      </p>
+  </div>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+{% if fragment.enabled_classes is none %}
+<tr>
+{% else %}
+<tr class='vis {{fragment.enabled_classes}}'>
+{% endif %}
+{% if fragment.compulsory %}
+  <td align=right class="compulsory">
+{% else %}
+  <td align=right>
+{% endif %}
+{{fragment.caption}}:
+</td><td align=left>
+{{form[fragment.key1](class_=fragment.classes)}}
+{{form[fragment.key2](class_=fragment.classes)}}
+{% if not fragment.descriptions1 is none or not fragment.descriptions2 is none %}
+  &nbsp;<img src='static/help.png' class='help' data-featherlight='#dlg-{{fragment.key}}'>
+  <div class='hidden' title='Help'>
+  <div id='dlg-{{fragment.key}}' class='urgency-block'><font color=#060><b>{{fragment.caption}}</b></font>
+  {% if not fragment.descriptions1 is none %}
+    <table rules=rows border=1>
+    {% for k,v in fragment.descriptions1.items() %}
+      <tr><td><b>{{fragment.names1[k]}}</b></td><td>
+      {% autoescape false %}
+        {{v}}
+      {% endautoescape %}
+      </td></tr>
+    {% endfor %}
+    </table>
+  {% endif %}
+  {% if not fragment.descriptions2 is none %}
+    <table rules=rows border=1>
+    {% for k,v in fragment.descriptions2.items() %}
+      <tr><td><b>{{fragment.names2[k]}}</b></td><td>
+      {% autoescape false %}
+        {{v}}
+      {% endautoescape %}
+      </td></tr>
+    {% endfor %}
+    </table>
+  {% endif %}
+  </div>
+  </div>
+{% endif %}
+</td>
+</tr>

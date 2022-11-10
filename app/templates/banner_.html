@@ -1,0 +1,9 @@
+{% set enabled_classes = '' if fragment.enabled_classes is none else 'vis ' + fragment.enabled_classes %}
+{% if fragment.required_condition is not none %}
+    <tr class='conditional {{enabled_classes}}' compulsory_key="{{fragment.required_condition.get('key')}}" compulsory_value="{{fragment.required_condition.get('value')}}">
+{% else %}
+    <tr class='{{enabled_classes}}'>
+{% endif %}
+{# <td colspan=2>{% include fragment.href %}</td> #}
+<td></td><td>{% include fragment.href %}</td>
+</tr>

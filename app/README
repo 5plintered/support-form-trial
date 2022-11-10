@@ -1,0 +1,10 @@
+Running Locally:
+Miniconda3-4.2.21 can be installed on your local machine somewhere (there might be an installer here /d/sw/miniconda3/latest/installer/Miniconda3-4.3.21-Linux-x86_64.sh).
+Install project dependancies.
+ conda env create -f environment.yml
+Once installed it will need to be enabled with something like
+ source ~/miniconda/bin/activate web_support
+Once enabled you can then launch a server on localhost with
+ python support.py
+and access it at localhost:5000/test
+

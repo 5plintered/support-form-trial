@@ -1,0 +1,104 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+  <head>
+    <title>Support</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="http://secure.dugeo.com/support-icon/static/style.css" type="text/css">
+    <link rel="stylesheet" href="http://secure.dugeo.com/support-icon/static/featherlight.min.css" type="text/css">
+  </head>
+
+  <body>
+
+  <style>
+    .hidden {
+      display: none;
+    }
+  </style>
+
+  <div class="container">
+
+    {% if test %}
+    <h1>TEST MODE</h1>
+    {% endif %}
+
+    <p>More information is always helpful, but only the <font color=red>red fields</font> are required.</p>
+    <p>You'll receive a copy of your submission via email.  If you need to add further information, please reply to that email.</p>
+
+    <form method="POST" action="#" enctype="multipart/form-data" name="f">
+    <div class='start_visible'>Loading...</div>
+    <table class='start_hidden hidden'>
+      <tr>  
+        <td align=right nowrap class="compulsory">Your Username:</td>
+        <td align=left colspan=2>
+          <div class="invalid hidden">Username is not valid</div>
+          {{form.email(class="required enabled", required=True, value=defaults['email'])}}&nbsp;@dug.com
+        </td>
+      </tr>
+
+      <tr>
+        <td align=right nowrap>Date of Incident:</td>
+        <td align=left>{{form.date(value=defaults['date'])}}</td>
+      </tr>
+
+      <tr>
+        <td align=right nowrap>CC:</td>
+        <td align=left colspan=2>
+{# Add as many of these as you require; if the cc contains the specified user, the invalid line will be activated. #}
+          <div class="invalid hidden match_user" contains='yongzhong'>Do not contact Yongzhong directly!  Support is not his job!</div>
+          {{form.cc(value=defaults['cc'])}}
+          &nbsp;Please do <u>not</u> CC individual support or IT staff</td>
+      </tr>
+
+      <tr>
+        <td align=right class="compulsory">Subject:</td>
+        <td colspan="2">{{form.subject(class="full-width required enabled", required=True, value=defaults['subject'])}}</td>
+      </tr>
+
+      {% for fragment in form.fragments %}
+        {% include fragment.template %}
+      {% endfor %}
+
+      <tr class='vis vis_sw vis_it vis_simple vis_hse'>
+        <td align=right valign=top nowrap>Attach File:</td>
+        <td align=left colspan=2>
+        {# The attachments list is managed dynamically by javascript. The next attribute is used to give each upload a unique id/name #}
+        <table id='atlist' next='0'>
+          <tbody></tbody>
+        </table>
+        {# The primary file input will get moved around; it starts out life hidden here as a template which the javascript will pull out on startup #}
+        <div id='attemplate' class='hidden'>
+        {{form.attachments(multiple=True)}}
+        </div>
+        {% if form.attachments.errors %}
+        <div class="invalid">{{form.attachments.errors[0]}}</div>
+        {% endif %}
+        </td>
+      </tr>
+
+      </table>
+
+      <br>
+      <div id='warning_msg'></div>
+      <input id='submit' type="submit" name="Submit" value="Submit" />
+    </form>
+
+    <p>Want this form in your browser toolbar?  Drag this link there --&gt; (
+    {% if defaults['email'] is none %}
+    <a href="">
+    {% else %}
+    <a href="?email={{defaults['email']}}">
+    {% endif %}
+    Support</a>)</p>
+
+  </div>
+  <script src="http://secure.dugeo.com/support-icon/static/jquery-3.2.1.min.js"></script>
+  <script src="http://secure.dugeo.com/support-icon/static/featherlight.min.js"></script>
+  {# Collapse the script rendering into this same file, rather than force another server load. #}
+  <script>
+    {% set script = form.script %}
+    {% include "script_.js" %}
+  </script>
+  </body>
+</html>

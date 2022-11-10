@@ -1,0 +1,26 @@
+{% if fragment.enabled_classes is none %}
+  <tr class='vis any'>
+{% else %}
+  <tr class='vis any {{fragment.enabled_classes}}'>
+{% endif %}
+{% if fragment.compulsory %}
+  <td align=right class="compulsory">
+{% else %}
+  <td align=right>
+{% endif %}
+{{fragment.caption}}:
+</td><td align=left>
+<table>
+{% for item in fragment.entries %}
+  {% if loop.index0 % fragment.columns == 0 %}<tr>{% endif %}  
+  {% set key = item.get('key') %}
+  <td class='checkbox'>{{form[key](class_=fragment.classes, value=defaults[key])}}&nbsp;<label for='{{key}}'>{{item.get('name')}}</label></td>
+  {% if (loop.index0+1) % fragment.columns == 0 %}</tr>{% endif %}
+{% endfor %}
+{% set filler = fragment.entries.__len__() % fragment.columns %}
+{% if filler != 0 %}
+  {% for c in range(0, filler) %}<td></td>{% endfor %}
+  </tr>
+{% endif %}
+</table>
+</td></tr>

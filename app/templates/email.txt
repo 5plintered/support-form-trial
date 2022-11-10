@@ -1,0 +1,10 @@
+{{product}}
+
+
+{% if date %}
+Date: {{date}}
+
+{% endif %}
+{% for v in values %}
+{{v}}
+{% endfor %}

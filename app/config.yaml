@@ -1,0 +1,528 @@
+# Configure the log file, and how large it can get - unbounded is not good!
+logging:
+  # For debugging, you may instead want
+  path: ../support.log
+  unsent_path: ../unsent/
+  # path: /var/log/web-support/web-support.log
+  # unsent_path: /var/log/web-support-unsent/
+  max_unsent: 100
+  max_log_size_mb: 5
+  max_log_files: 2
+
+# See https://pythonhosted.org/Flask-Mail/ for mail settings
+smtp:
+  MAIL_SERVER: localhost
+  MAIL_PORT: 25
+
+# Parameters for script.js, so it can manage field visibility based on type selection
+script:
+  type_id: type  #name/key of the type field
+  vis_classes:
+    - 'vis_sw'
+    - 'vis_it'
+    - 'vis_simple'
+    - 'vis_hse'
+    - 'vis_gt'
+    - 'vis_fi'
+    - 'vis_cs'
+  vis_values:
+    case_study: 'vis_cs'
+    processing: 'vis_sw'
+    imaging: 'vis_sw'
+    geotech: 'vis_gt'
+    flatirons: 'vis_fi'
+    qi: 'vis_sw'
+    insight: 'vis_sw'
+    it: 'vis_it'
+    pcs: 'vis_it'
+    reopen_timesheet: 'vis_it'
+    timesheet: 'vis_it'
+    facilities: 'vis_simple'
+    hse: 'vis_hse'
+    security: 'vis_simple'
+    bd_technical: 'vis_simple'  
+  attachment_max_size: 7168000
+  attachment_total_size: 20480000
+
+# Requested by Dan Lamont via email 4 Dec 2017.
+additional_recipients:
+  houston_admin:
+    to: [houstonadmin@downunder.zendesk.com]
+    conditions:
+      location: hud
+      type: facilities
+  kl_admin:
+    to: [kladmin@downunder.zendesk.com]
+    conditions:
+      location: kud
+      type: facilities
+  london_admin:
+    to: [londonadmin@downunder.zendesk.com]
+    conditions:
+      location: lud
+      type: facilities
+  perth_admin:
+    to: [perthadmin@downunder.zendesk.com]
+    conditions:
+      location: pud
+      type: facilities
+  global_admin:
+    to: [perthadmin@downunder.zendesk.com]
+    conditions:
+      location: all
+      type: facilities
+  other_admin:
+    to: [perthadmin@downunder.zendesk.com]
+    conditions:
+      location: ''
+      type: facilities
+  perth_ag_artifacts:
+    to: [bjornm@dug.com]
+    conditions:
+      location: pud
+      issue: 'Creates artifacts / Poor solution'
+  london_ag_artifacts:
+    to: [dirkf@dug.com]
+    conditions:
+      location: lud
+      issue: 'Creates artifacts / Poor solution'
+  kl_ag_artifacts:
+    to: [ahmada@dug.com]
+    conditions:
+      location: kud
+      issue: 'Creates artifacts / Poor solution'
+  perth_ag_advice:
+    to: [bjornm@dug.com]
+    conditions:
+      location: pud
+      issue: 'Parameter / Workflow advice'
+  london_ag_advice:
+    to: [dirkf@dug.com]
+    conditions:
+      location: lud
+      issue: 'Parameter / Workflow advice'
+  kl_ag_advice:
+    to: [ahmada@dug.com]
+    conditions:
+      location: kud
+      issue: 'Parameter / Workflow advice'
+
+
+# All fields, in the order they should appear on the web page.
+# type has a special option element 'vis_class' which indicates which vis_class will be enabled when that type is selected
+# enabled_for is used to control whether a field is enabled based on the currently enabled vis_class
+# options can either be a list, or a dictionary; if a dictionary, the visible option will be the 'name' value.
+# a help button is automatically displayed if an item's options are a dictionary including the 'description' key.
+# optional fields do not cause any red warnings.
+# if supplied, prefix and suffix will wrap the result when written to the email.
+fields:
+  type:
+    template: combo
+    caption: Type
+    default_option: insight
+    enabled_for: vis_all
+    compulsory: true
+    options:
+      processing:
+        name: Processing
+        vis_class: vis_sw
+        to: [support@dug.com]
+        cc: []
+      imaging:
+        name: Imaging
+        vis_class: vis_sw
+        to: [support@dug.com]
+        cc: []
+      geotech:
+        name: GeoTech (Dataload)
+        vis_class: vis_gt
+        to: [geotech@dug.com]
+        cc: []
+      flatirons:
+        name: Flatirons
+        vis_class: vis_fi
+        to: [flatirons_support@dug.com]
+        cc: []
+      qi:
+        name: QI
+        vis_class: vis_sw
+        to: [support@dug.com]
+        cc: []
+      insight:
+        name: Insight (general)
+        vis_class: vis_sw
+        to: [support@dug.com]
+        cc: []
+      case_study:
+        name: Case Study (Internal)
+        vis_class: vis_cs
+        to: [casestudies@downunder.zendesk.com]
+        cc: []
+      bd_technical:
+        name: BD Technical Support
+        vis_class: vis_simple
+        to: [bdtechnical@downunder.zendesk.com]
+        cc: []
+      timesheet:
+        name: Timesheet - access a project for time writing
+        vis_class: vis_it
+        to: [projadmin@dug.com]
+        cc: []
+      reopen_timesheet:
+        name: Reopen Timesheet
+        vis_class: vis_it
+        to: []
+        cc: [ceciliak@dug.com]
+      pcs:
+        name: PCS - Issues & Requests
+        vis_class: vis_it
+        to: [pcs@downunder.zendesk.com]
+        cc: []
+      it:
+        name: IT / Phones / Queueing
+        vis_class: vis_it
+        to: [dug_it@dug.com]
+        cc: []
+      facilities:
+        name: Facilities Maintenance
+        vis_class: vis_simple
+        to: []
+        cc: []
+      hse:
+        name: HSE
+        vis_class: vis_hse
+        to: [hse@downunder.zendesk.com]
+        cc: []
+      security:
+        name: Security
+        vis_class: vis_simple
+        to: [security@dug.com]
+        cc: []
+  location:
+    template: combo
+    enabled_for: 'vis_sw vis_it vis_simple vis_hse vis_cs'
+    caption: Location
+    prefix: 'Location: '
+    options:
+      pud:
+        name: Perth
+      kud:
+        name: Kuala Lumpur
+      hud:
+        name: Houston
+      lud:
+        name: London
+      all:
+        name: Global
+  priority:
+    template: combo
+    enabled_for: 'vis_sw vis_it vis_simple vis_hse vis_fi'
+    caption: Urgency
+    suffix: ' priority'
+    options:
+      p0:
+        name: High
+        description: Production work is blocked.<br> No workaround is available.
+      p1:
+        name: Medium
+        description: Production work will soon be blocked <b>or</b> major problem with a workaround, but needing a long-term fix.
+      p2:
+        name: Low / Risky
+        description: Production work can proceed, but the problem carries significant risk for the future.
+      p5:
+        name: Low / Minor
+        description: Nuisance bugs, enhancements that are unlikely to result in major catastrophes.
+  version:
+    template: string
+    enabled_for: vis_sw
+    caption: 'Version/Build ID'
+    prefix: 'version: '
+  project:
+    template: string
+    enabled_for: 'vis_sw vis_cs'
+    caption: 'Full project path'
+    prefix: 'project: '
+  client:
+    template: string
+    enabled_for: 'vis_fi'
+    caption: 'Client'
+    prefix: 'client:'
+  area:
+    template: string
+    enabled_for: 'vis_fi'
+    caption: 'Area'
+    prefix: 'area:'
+  projectName:
+    template: string
+    enabled_for: 'vis_fi'
+    caption: 'Project name'
+    prefix: 'project_name:'
+  insightCmpGridCorners:
+    template: string
+    enabled_for: 'vis_fi'
+    caption: 'Insight CMP grid corners'
+    prefix: 'insight_cmp_grid_corners:'
+  segyLocation:
+    template: string
+    enabled_for: 'vis_fi'
+    caption: 'SEGY location'
+    prefix: 'segy_location:'
+  projectType:
+    template: combo
+    enabled_for: 'vis_fi'
+    caption: 'Project type'
+    prefix: 'project_type:'
+    options:
+      - 2D
+      - 3D
+      - Mix
+  startDate:
+    template: string
+    enabled_for: 'vis_fi'
+    caption: 'Start date (gantt)'
+    prefix: 'start_date:'
+  deliveryDate:
+    template: string
+    enabled_for: 'vis_fi'
+    caption: 'Delivery date (gantt)'
+    prefix: 'delivery_date:'
+  session:
+    template: string
+    enabled_for: 'vis_sw vis_cs'
+    caption: 'Session name'
+    prefix: 'session: '
+  workflow:
+    template: string
+    enabled_for: 'vis_sw vis_it'
+    optional: true
+    caption: 'Workflow directory'
+    prefix: 'workflow directory: '
+    rows: 1
+    cols: 80
+    placeholder: "If this concerns a cluster job, you must provide the full workflow directory or we can't help you!"
+    invalid: "This is not a <b>full</b> workflow directory -- please don't make us hunt for it!"
+  module:
+    template: combo
+    caption: Module
+    prefix: 'module: '
+    enabled_for: vis_sw
+    options:
+      amplitudes:
+        name: Amplitudes, Gain & Q
+        expect: processing
+      deblend:
+        name: Deblending
+        expect: processing
+      deghost:
+        name: Deghost / debubble / desig
+        expect: processing
+      demultiple:
+        name: Demultiple & Match
+        expect: processing
+      geom:
+        name: Geom, headers & loading
+        expect: processing
+      noise:
+        name: Noise attenuation
+        expect: processing
+      nfh: 
+        name: NFH
+        expect: processing
+      regularisation:
+        name: Regularisation & Interpolation
+        expect: processing
+      statics:
+        name: Statics
+        expect: processing
+      sorting:
+        name: Sorting / binning
+        expect: processing
+      sc:
+        name: SC Amps & SC Decon
+        expect: processing
+      mig:
+        name: FWI
+        expect: imaging
+      prestm:
+        name: PreSTM
+        expect: imaging
+      presdm:
+        name: PreSDM
+        expect: imaging
+      ray:
+        name: Ray tracing
+        expect: imaging
+      rmo:
+        name: RMO
+        expect: imaging
+      rtm:
+        name: RTM
+        expect: imaging
+      stacking:
+        name: Stacking / mutes
+        expect: imaging
+      tomo:
+        name: Tomography
+        expect: imaging
+      velocity:
+        name: Velocity analysis
+        expect: imaging
+      volume:
+        name: Volume operations
+        expect: imaging
+      projects:
+        name: Projects and sessions
+        expect: insight
+      performance:
+        name: Performance
+        expect: insight
+      views:
+        name: Views and displays
+        expect: insight
+      version:
+        name: Version control
+        expect: insight
+      qi:
+        name: Wells/QI
+        expect: qi
+      other:
+        name: Other
+        expect: any
+  issue:
+    template: combo
+    caption: 'Issue'
+    prefix: 'issue: '
+    enabled_for: vis_sw
+    options:
+      - Creates artifacts / Poor solution
+      - Feature request
+      - Job fails / Won't build
+      - Job submission advice
+      - Long runtime
+      - Parameter / Workflow advice
+      - Other
+  logTicket:
+    template: string
+    caption: 'Log Ticket'
+    prefix: 'log ticket:'
+    placeholder: 'Ticket# for Insight logs'
+    enabled_for: vis_sw
+    required_condition:
+      key: issue
+      value: Long runtime
+  gtRedirectBanner:
+    template: banner
+    enabled_for: 'vis_gt'
+    href: gts_portal.html
+  teamleader:
+    template: string
+    enabled_for: 'vis_fi'
+    caption: 'Team leader'
+    prefix: 'team_leader:'
+  projectleader:
+    template: string
+    enabled_for: 'vis_fi'
+    caption: 'Project leader'
+    prefix: 'project_leader:'
+  finalDatum:
+    template: string
+    enabled_for: 'vis_fi'
+    caption: 'Final datum'
+    prefix: 'final_datum:'
+  replacementVelocity:
+    template: string
+    enabled_for: 'vis_fi'
+    caption: 'Replacement velocity'
+    prefix: 'replacement_velocity:'
+  tomography:
+    template: combo
+    caption: 'Tomography'
+    prefix: 'tomography:'
+    enabled_for: vis_fi
+    options:
+      required:
+        name: 'Required'
+      tested:
+        name: 'Tested'
+      none:
+        name: 'None'
+  merge:
+    template: combo
+    caption: 'Merge'
+    prefix: 'merge: '
+    enabled_for: vis_fi
+    options:
+      - 'Yes'
+      - 'No'
+  includesMarineData:
+    template: combo
+    caption: 'Includes marine data (airgun/hydrophone)'
+    prefix: 'includes_marine_data:'
+    enabled_for: vis_fi
+    options:
+      - 'Yes'
+      - 'No'
+  description:
+    template: string
+    enabled_for: 'vis_sw vis_it vis_simple vis_fi vis_cs'
+    caption: Description
+    prefix: 'description: '
+    rows: 5
+    cols: 80
+    placeholder: "The better your description, the more quickly we can help!"
+  summary:
+    template: string
+    enabled_for: 'vis_hse'
+    caption: Description
+    prefix: 'description: '
+    rows: 5
+    cols: 80
+    placeholder: "Please provide a short description of the incident. A local HSE representative will arrange a meeting to gather detailed information to be recorded on a standard HSE incident form."
+  reproduce:
+    template: string
+    enabled_for: 'vis_sw vis_it'
+    optional: true
+    caption: 'Steps to Reproduce'
+    prefix: 'steps: '
+    rows: 5
+    cols: 80
+    placeholder: "If you know how to reproduce it, and it's not obvious, please tell us."
+  log:
+    template: string
+    enabled_for: 'vis_sw vis_it'
+    optional: true
+    caption: 'Console / Log'
+    prefix: 'console/log: '
+    rows: 5
+    cols: 80
+    placeholder: "If it's a command-line program, please provide the path to the logfile (or paste the console output, if no logfile)"
+
+# The order in which configurable fields should appear in the email, following the static header fields.
+email:
+  - location
+  - priority
+  - version
+  - project
+  - session
+  - workflow
+  - module
+  - issue
+  - gtServices
+  - gtRequester
+  - gtSurvey
+  - gtDugRef
+  - gtDirectory
+  - gtDataType
+  - gtSurveySize
+  - gtSurveyDatum
+  - gtStartDate
+  - gtTimeEstimate
+  - description
+  - reproduce
+  - logTicket
+  - log
+
+# Addresses to use when in test mode (/test url)
+test:
+  to: [benm@dug.com]
+  cc: []

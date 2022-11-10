@@ -1,0 +1,48 @@
+.container {
+  text-align: center;
+  width: 750px;
+  margin: auto;
+  font-family: sans-serif;
+  font-size: 16px;
+}
+
+td.compulsory.warning {
+  color: red;
+}
+
+div.urgency-block {
+  text-align: left;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.invalid, .filesize {
+  font-size: 12px;
+  color: red;
+}
+
+#warning_msg {
+  color: red;
+}
+
+#warning_msg.warn {
+  color: orangered;
+}
+
+div.filetotal {
+  display: none;
+}
+
+input.warning {
+  outline: 1px solid red;
+}
+
+.checkbox {
+  font-size: 14px;  
+}
+
+.size {
+  color: red;
+}

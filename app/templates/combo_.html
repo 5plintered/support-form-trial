@@ -1,0 +1,30 @@
+{% if fragment.enabled_classes is none %}
+  <tr>
+{% else %}
+  <tr class='vis {{fragment.enabled_classes}}'>
+{% endif %}
+{% if fragment.compulsory %}
+  <td align=right class="compulsory">
+{% else %}
+  <td align=right>
+{% endif %}
+{{fragment.caption}}:
+</td><td align=left>
+{{form[fragment.key](class_=fragment.classes)}}
+{% if not fragment.descriptions is none %}
+  &nbsp;<img src='static/help.png' class='help' data-featherlight='#dlg-{{fragment.key}}'>
+  <div class='hidden' title='Help'>
+  <div id='dlg-{{fragment.key}}' class='urgency-block'><font color=#060><b>{{fragment.caption}}</b></font>
+  <table rules=rows border=1>
+  {% for k,v in fragment.descriptions.items() %}
+    <tr><td><b>{{fragment.names[k]}}</b></td><td>
+    {% autoescape false %}
+      {{v}}
+    {% endautoescape %}
+    </td></tr>
+  {% endfor %}
+  </table>
+  </div>
+  </div>
+{% endif %}
+</td></tr>
